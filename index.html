@@ -39,15 +39,8 @@ body{
   transition:.8s ease;
 }
 
-#intro h1{
-  font-size:26px;
-  margin-bottom:8px;
-}
-
-#intro p{
-  font-size:15px;
-  opacity:.9;
-}
+#intro h1{font-size:26px;margin-bottom:8px}
+#intro p{font-size:15px;opacity:.9}
 
 #intro button{
   margin-top:26px;
@@ -59,6 +52,42 @@ body{
   font-size:16px;
   cursor:pointer;
   box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
+
+/* ---------- เอฟเฟกลอย ---------- */
+.bg{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+.float-heart,
+.float-img{
+  position:absolute;
+  bottom:-80px;
+  opacity:.6;
+  animation:rise linear forwards;
+}
+
+.float-img{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  object-fit:cover;
+  box-shadow:0 6px 16px rgba(120,90,180,.35);
+}
+
+@keyframes rise{
+  from{
+    transform:translateY(0) translateX(0);
+    opacity:0;
+  }
+  10%{opacity:.6}
+  to{
+    transform:translateY(-120vh) translateX(40px);
+    opacity:0;
+  }
 }
 
 /* ---------- หน้าหลัก ---------- */
@@ -92,7 +121,6 @@ body{
   box-shadow:0 30px 60px rgba(140,110,200,.25);
 }
 
-/* ---------- รูป ---------- */
 .photo{
   width:170px;
   height:170px;
@@ -109,7 +137,6 @@ body{
   object-fit:cover;
 }
 
-/* ---------- ข้อความ ---------- */
 h2{
   margin:22px 0 6px;
   font-size:26px;
@@ -142,27 +169,6 @@ h2{
   line-height:1.8;
   color:#6a5f8f;
 }
-
-/* ---------- เอฟเฟก ---------- */
-.bg{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-}
-
-.float{
-  position:absolute;
-  bottom:-60px;
-  opacity:.6;
-  animation:rise linear forwards;
-}
-
-@keyframes rise{
-  from{transform:translateY(0);opacity:0}
-  10%{opacity:.6}
-  to{transform:translateY(-120vh);opacity:0}
-}
 </style>
 </head>
 
@@ -175,7 +181,7 @@ h2{
   <button onclick="enter()">✨ แตะเพื่อเข้า</button>
 </div>
 
-<!-- เอฟเฟก -->
+<!-- เอฟเฟกลอย -->
 <div class="bg" id="bg"></div>
 
 <!-- หน้าหลัก -->
@@ -192,9 +198,9 @@ h2{
     <div class="divider"></div>
 
     <div class="message">
-      (คุณแก้ข้อความตรงนี้ได้เองทั้งหมด)<br><br>
-      ใส่ความรู้สึกของคุณลงไป<br>
-      แค่เขาอ่าน ก็รู้แล้วว่าคุณตั้งใจแค่ไหน
+      (แก้ข้อความตรงนี้ได้เองทั้งหมด)<br><br>
+      เขียนความรู้สึกของคุณลงไป  
+      ให้เขารู้ว่าทุกช่วงเวลามีความหมายแค่ไหน
     </div>
 
   </div>
@@ -204,7 +210,9 @@ h2{
 const intro = document.getElementById("intro");
 const main = document.getElementById("main");
 const bg = document.getElementById("bg");
-const symbols = ["💜","💖","✨","🤍","🌸"];
+
+const hearts = ["💜","💖","💗","🤍","✨","🌸"];
+const imgs = ["pic1.jpg","pic2.jpg"];
 
 function enter(){
   intro.style.opacity="0";
@@ -214,18 +222,31 @@ function enter(){
   },600);
 }
 
-function floatItem(){
-  const el=document.createElement("div");
-  el.className="float";
-  el.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-  el.style.left=Math.random()*100+"vw";
-  el.style.fontSize=(14+Math.random()*18)+"px";
-  el.style.animationDuration=(8+Math.random()*8)+"s";
-  bg.appendChild(el);
-  setTimeout(()=>el.remove(),16000);
+/* สร้างของลอย */
+function spawn(){
+  const isImg = Math.random() > 0.45;
+
+  if(isImg){
+    const img=document.createElement("img");
+    img.src=imgs[Math.floor(Math.random()*imgs.length)];
+    img.className="float-img";
+    img.style.left=Math.random()*100+"vw";
+    img.style.animationDuration=(8+Math.random()*6)+"s";
+    bg.appendChild(img);
+    setTimeout(()=>img.remove(),16000);
+  }else{
+    const h=document.createElement("div");
+    h.className="float-heart";
+    h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(14+Math.random()*18)+"px";
+    h.style.animationDuration=(7+Math.random()*6)+"s";
+    bg.appendChild(h);
+    setTimeout(()=>h.remove(),16000);
+  }
 }
 
-setInterval(floatItem,700);
+setInterval(spawn,450);
 </script>
 
 </body>
